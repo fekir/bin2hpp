@@ -18,10 +18,10 @@ namespace hexutils{
 
 	constexpr char elems[] = "0123456789ABCDEF";
 	inline constexpr std::array<char,2> to_hex(const unsigned char c) noexcept {
-			static_assert(((std::numeric_limits<unsigned char>::max() & 0xff) >> 4 )<16, "Impossible");
-			static_assert(((std::numeric_limits<unsigned char>::max() & 0x0f)      )<16, "Impossible");
-			return {elems[(c & 0xff) >> 4], elems[c & 0x0f]};
-		}
+		static_assert(((std::numeric_limits<unsigned char>::max() & 0xff) >> 4 )<16, "Impossible");
+		static_assert(((std::numeric_limits<unsigned char>::max() & 0x0f)      )<16, "Impossible");
+		return {elems[(c & '\xff') >> 4], elems[c & 0x0f]};
+	}
 
 }
 
@@ -98,25 +98,27 @@ namespace bin2hpp{
 	// crea sequenza " 0xAB,0xCD,... " ritorna lunghezza dell'array
 	// fixme: controllare se servono cast per alcuni warnings
 	inline size_t convertstreamtohexnotation(std::istream& in, std::ostream& out){
-        size_t totalsize = {};
+		size_t totalsize = {};
 
 		std::array<unsigned char, 1024> buffer;
 		while(!in.eof()){
 
 			const auto readed = in.read(reinterpret_cast<char*>(&buffer.at(0)), buffer.size()).gcount();
-			// fixme: if totalsize >int_max-readed throw error "file is too big"
-			totalsize += readed;
+			assert(readed >= 0);
+			const auto unsigned_readed = static_cast<std::make_unsigned<decltype(readed)>::type>(readed);
+			// fixme: if totalsize >int_max-readed throw error "file is too big" as it can' be saved in an array
+			totalsize += unsigned_readed;
 
-            if(in.fail() && !in.eof()){ // something went wrong, but we where not at the end of the file
-                throw std::runtime_error("error reading stream");
-            }
+			if(in.fail() && !in.eof()){ // something went wrong, but we where not at the end of the file
+				throw std::runtime_error("error reading stream");
+			}
 
 			// fixme: error checking
 			// suppongo legga tutto --> altrimenti exception!
 			//if(in.) --> check se qualcosa andato male
-			for(auto i = decltype(readed){0} ; i != readed; ++i){
+			for(auto i = decltype(unsigned_readed){0} ; i != unsigned_readed; ++i){
 				auto c = hexutils::to_hex(buffer.at(i));
-				out << "0x" << c[0] << c[1] << ",";
+				out << "'\\x" << c[0] << c[1] << "',";
 			}
             int a = 1;
 		}
