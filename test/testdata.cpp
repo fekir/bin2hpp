@@ -41,19 +41,6 @@ TEST_CASE("HelloWorldTostdarray", "[helloworldtostarray]"){
 	//std::cout << "content:\n" << out.str() << "\n";
 }
 
-// Todo verify formatting
-TEST_CASE("formatting", "[]"){
-	//std::ios::sync_with_stdio(false); --> remove output of catch!
-	std::locale indentLocale(std::locale::classic(), new IndentFacet());
-	std::stringstream in;
-	in << "Hello World!";
-	std::stringstream out;
-	// Imbue std::cout before it is used
-	out.imbue(indentLocale);
-	create_std_array(in, "myarr", constid_array::_constexpr,  out);
-	std::ofstream out2("/tmp/data.hpp");
-	out2 << "//content:\n" << out.str() << "\n";
-}
 
 
 TEST_CASE("file1","[]"){
