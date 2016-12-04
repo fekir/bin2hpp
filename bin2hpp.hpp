@@ -37,9 +37,9 @@ namespace bin2hpp{
 	enum class javarev{j1_3, j1_4, j1_5, j1_6, j1_7, j1_8, j1_9};
 
 
-    enum class resource_type_cpp{std_arr, c_arr, std_string, c_string};
-    enum class resource_type_c{c_arr, c_string};
-    enum class resource_type_java{byte_arr, Byte_arr, obj_arr, jstring};
+	enum class resource_type_cpp{std_arr, c_arr, std_string, c_string};
+	enum class resource_type_c{c_arr, c_string};
+	enum class resource_type_java{byte_arr, Byte_arr, obj_arr, jstring};
 
 	namespace constid {
 		const std::string _enum       = "enum";
@@ -134,7 +134,7 @@ namespace bin2hpp{
 				auto c = hexutils::to_hex(buffer.at(i));
 				out << "'\\x" << c[0] << c[1] << "',";
 			}
-            int a = 1;
+			int a = 1;
 		}
 		return totalsize;
 
@@ -150,18 +150,18 @@ namespace bin2hpp{
 		out << "};\n";
 	}
 
-    inline void create_std_string(std::istream& in, const std::string& variablename, constid_array c_a, std::ostream& out){
-        out << "const std::string " << variablename << "\"";
-        size_t totalsize = {};
+	inline void create_std_string(std::istream& in, const std::string& variablename, constid_array c_a, std::ostream& out){
+		out << "const std::string " << variablename << "\"";
+		size_t totalsize = {};
 
-        std::string tmp;
-        while(std::getline (in,tmp)){
-            out << tmp << "\n";
+		std::string tmp;
+		while(std::getline (in,tmp)){
+			out << tmp << "\n";
 
-        }
-        // fixme: ad error checking!
-        out << "\"";
-    }
+		}
+		// fixme: ad error checking!
+		out << "\"";
+	}
 
 
 	// crea const_id size_t variablename_size = 42;
@@ -188,55 +188,55 @@ namespace bin2hpp{
 
 		if(op.usepragma){
 			out << "#pragma once\n\n";
-        } else {
-            // fixme --> uni as external dependency to unittest
-            std::random_device rd;     // only used once to initialise (seed) engine
-            std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-            std::uniform_int_distribution<int> uni(0,std::numeric_limits<int>::max()); // guaranteed unbiased
-            auto random_integer = uni(rng);
-            const std::string header = "HEADER_"+variablename+"_" +std::to_string(random_integer);
-            out << "#ifndef " << header << "\n";
+		} else {
+			// fixme --> uni as external dependency to unittest
+			std::random_device rd;     // only used once to initialise (seed) engine
+			std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+			std::uniform_int_distribution<int> uni(0,std::numeric_limits<int>::max()); // guaranteed unbiased
+			auto random_integer = uni(rng);
+			const std::string header = "HEADER_"+variablename+"_" +std::to_string(random_integer);
+			out << "#ifndef " << header << "\n";
 			out << "#define " << header << "\n\n";
 		}
 		out << "// " << comment << "\n\n";
 
-        switch (op.res) {
-        case bin2hpp::resource_type_cpp::std_arr:
-            out << "#include <array>\n\n";
-            break;
-        case bin2hpp::resource_type_cpp::std_string:
-            out << "#include <string>\n\n";
-            break;
-        case bin2hpp::resource_type_cpp::c_arr:
-        case bin2hpp::resource_type_cpp::c_string:
-            out << "#include <cstddef>\n\n";
-            break;
-        default:
-            assert(false);
-            break;
-        }
+		switch (op.res) {
+		case bin2hpp::resource_type_cpp::std_arr:
+			out << "#include <array>\n\n";
+			break;
+		case bin2hpp::resource_type_cpp::std_string:
+			out << "#include <string>\n\n";
+			break;
+		case bin2hpp::resource_type_cpp::c_arr:
+		case bin2hpp::resource_type_cpp::c_string:
+			out << "#include <cstddef>\n\n";
+			break;
+		default:
+			assert(false);
+			break;
+		}
 
 		if(!op._namespace.empty()){
 			out << "namespace " << op._namespace << " {\n\n";
 		}
 
-        switch (op.res) {
-        case bin2hpp::resource_type_cpp::std_arr:
-            create_std_array(in, variablename, op.const_arr, out);
-            break;
-        case bin2hpp::resource_type_cpp::std_string:
-            create_std_string(in, variablename, op.const_arr, out);
-            break;
-        case bin2hpp::resource_type_cpp::c_arr:
-            create_c_array(in, variablename, op.const_arr, op.const_size, true, out);
-            break;
-        case bin2hpp::resource_type_cpp::c_string:
-            create_c_array(in, variablename, op.const_arr, op.const_size, true, out);
-            break;
-        default:
-            assert(false);
-            break;
-        }
+		switch (op.res) {
+		case bin2hpp::resource_type_cpp::std_arr:
+			create_std_array(in, variablename, op.const_arr, out);
+			break;
+		case bin2hpp::resource_type_cpp::std_string:
+			create_std_string(in, variablename, op.const_arr, out);
+			break;
+		case bin2hpp::resource_type_cpp::c_arr:
+			create_c_array(in, variablename, op.const_arr, op.const_size, true, out);
+			break;
+		case bin2hpp::resource_type_cpp::c_string:
+			create_c_array(in, variablename, op.const_arr, op.const_size, true, out);
+			break;
+		default:
+			assert(false);
+			break;
+		}
 
 		// close namespace
 		if(!op._namespace.empty()){
@@ -255,8 +255,8 @@ namespace bin2hpp{
 		if(op.usepragma){
 			out << "#pragma once\n\n";
 		} else {
-            static int ii = 0;
-            const std::string header = "HEADER_"+variablename+"_"+std::to_string(ii++); // fixme: add timestamp and all uppercase (like vs...)
+			static int ii = 0;
+			const std::string header = "HEADER_"+variablename+"_"+std::to_string(ii++); // fixme: add timestamp and all uppercase (like vs...)
 			out << "#ifndef " << header << "\n";
 			out << "#define " << header << "\n\n";
 		}

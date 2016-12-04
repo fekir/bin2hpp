@@ -34,9 +34,9 @@ namespace params{
 		const std::string ns       = "-ns=";
 		const std::string pragma   = "-pragma";
 		const std::string standard = "-std=";
-			// c++98, c++03, c++11, c++14, c++17   | std::array/constexpr: c++11 | namespace : c++
-			// c89, c99, c11
-			// j1.3, j1.4, j1.5, j1.6, j1.7, j1.8  | generics: j1.5  | byte[], Byte[]/Object[], ArrayList<Byte>/ ArrayList<Object>
+		    // c++98, c++03, c++11, c++14, c++17   | std::array/constexpr: c++11 | namespace : c++
+		    // c89, c99, c11
+		    // j1.3, j1.4, j1.5, j1.6, j1.7, j1.8  | generics: j1.5  | byte[], Byte[]/Object[], ArrayList<Byte>/ ArrayList<Object>
 		const std::string constspec  = "-const=";     // const, constexpr
 		const std::string constsize  = "-constsize="; // enum, const, constexpr
 		const std::string constarray = "-constarr=";  // const, constexpr
@@ -256,7 +256,7 @@ namespace params{
 		params.erase(it, itend);
 		return toreturn;
 	}
-	
+
 	inline std::string tovarname(const std::string& filename){
 		const size_t lastSlashIndex = filename.find_last_of("/\\");
 		std::string var = filename.substr(lastSlashIndex + 1);
@@ -348,7 +348,7 @@ namespace params{
 
 		{
 			const auto itcons = std::find_if(params.begin(), itinend,
-											 [](const std::string &s) { return begins_with(s, options::constspec); }
+			                                 [](const std::string &s) { return begins_with(s, options::constspec); }
 			);
 			if (itcons != itinend) {
 				if(constspec.id == bin2hpp::lang_id::java){
@@ -373,9 +373,9 @@ namespace params{
 
 		{
 			const auto itconstsize = std::find_if(params.begin(), itinend,
-												  [](const std::string &s) {
-													  return begins_with(s, options::constsize);
-												  }
+			                                      [](const std::string &s) {
+				                                      return begins_with(s, options::constsize);
+			                                      }
 			);
 			if (itconstsize != itinend) {
 				if(constspec.id == bin2hpp::lang_id::java){
@@ -400,9 +400,9 @@ namespace params{
 
 		{
 			const auto itconstarray = std::find_if(params.begin(), itinend,
-												   [](const std::string &s) {
-													   return begins_with(s, options::constarray);
-												   }
+			                                       [](const std::string &s) {
+				                                       return begins_with(s, options::constarray);
+			                                       }
 			);
 
 			if (itconstarray != itinend) {
@@ -476,8 +476,8 @@ namespace params{
 
 		overwriteconstspec(params, lang, toreturn.langopt.const_arr, toreturn.langopt.const_size);
 
-        // fixme: add param for other options (string)
-        toreturn.langopt.res = overwritearrayspec(params, lang) ? bin2hpp::resource_type_cpp::std_arr : bin2hpp::resource_type_cpp::c_arr;
+		// fixme: add param for other options (string)
+		toreturn.langopt.res = overwritearrayspec(params, lang) ? bin2hpp::resource_type_cpp::std_arr : bin2hpp::resource_type_cpp::c_arr;
 
 		toreturn.langopt.usepragma = usepragma(params);
 
