@@ -191,7 +191,7 @@ namespace params{
 		out << indent << indent << "for specifying const id of array.\n";
 
 		out << indent << options::stdarr << " <true/false>\n";
-		out << indent << indent << "(only c++) for specifying if using std::array or a plain old and unsafe array.\n";
+		out << indent << indent << "(only c++) for specifying if using std::array or a plain old and \"unsafe\" array.\n";
 
 		out << indent << options::in << " <list-input-files>\n";
 		out << indent << indent << " list of input files, separated by space.\n";
