@@ -18,14 +18,6 @@ namespace params{
 		return str1.compare(0, str2.size(), str2) == 0;
 	}
 
-	inline bool hasconstexpxr(bin2hpp::cpprev r){
-		return (r != bin2hpp::cpprev::cpp98) && (r != bin2hpp::cpprev::cpp03);
-	}
-
-	inline bool hasstdarr(bin2hpp::cpprev r){
-		return hasconstexpxr(r); // both where introduced with c++11
-	}
-
 	enum param_errors : int{ // fixme: non vengono ancora usati
 		noerror = 0
 		, invalid_namespaceoption // ie: -ns && -nons
@@ -342,18 +334,6 @@ namespace params{
 		return true;
 	}
 
-	inline bin2hpp::langoptionscpp defaultsettingcpp(const bin2hpp::language rev){
-		assert(rev.id == bin2hpp::lang_id::cpp && " wrong language");
-
-		bin2hpp::langoptionscpp toreturn;
-		toreturn.rev = rev._cpprev;
-		if(rev._cpprev == bin2hpp::cpprev::cpp98 || rev._cpprev == bin2hpp::cpprev::cpp03){
-            toreturn.res = bin2hpp::resource_type_cpp::c_arr;
-			toreturn.const_arr = bin2hpp::constid_array::_const;
-			toreturn.const_size = bin2hpp::constid_size::_enum;
-		}
-		return toreturn;
-	}
 
 	inline bin2hpp::langoptionsc defaultsettingc(const bin2hpp::language rev){
 		assert(rev.id == bin2hpp::lang_id::c && " wrong language");
@@ -380,7 +360,7 @@ namespace params{
 					c_siz = bin2hpp::constid_size::_const;
 					c_arr = bin2hpp::constid_array::_const;
 				} else if (o_c_size == bin2hpp::constid::_constexpr) {
-					if(constspec.id != bin2hpp::lang_id::cpp || !hasconstexpxr(constspec._cpprev)){
+					if(constspec.id != bin2hpp::lang_id::cpp || !bin2hpp::has_constexpxr(constspec._cpprev)){
 						throw std::runtime_error("invalid const specifier for the specified language");
 					}
 					c_siz = bin2hpp::constid_size::_constexpr;
@@ -408,7 +388,7 @@ namespace params{
 				} else if (o_c_size == bin2hpp::constid::_enum) {
 					c_siz = bin2hpp::constid_size::_enum;
 				} else if (o_c_size == bin2hpp::constid::_constexpr) {
-					if(constspec.id != bin2hpp::lang_id::cpp || !hasconstexpxr(constspec._cpprev)){
+					if(constspec.id != bin2hpp::lang_id::cpp || !bin2hpp::has_constexpxr(constspec._cpprev)){
 						throw std::runtime_error("invalid const specifier for the specified language");
 					}
 					c_siz = bin2hpp::constid_size::_constexpr;
@@ -434,7 +414,7 @@ namespace params{
 				if (o_c_arr == bin2hpp::constid::_const) {
 					c_arr = bin2hpp::constid_array::_const;
 				} else if (o_c_arr == bin2hpp::constid::_constexpr) {
-					if(constspec.id != bin2hpp::lang_id::cpp || !hasconstexpxr(constspec._cpprev)){
+					if(constspec.id != bin2hpp::lang_id::cpp || !bin2hpp::has_constexpxr(constspec._cpprev)){
 						throw std::runtime_error("invalid const specifier for the specified language");
 					}
 					c_arr = bin2hpp::constid_array::_constexpr;
@@ -492,7 +472,7 @@ namespace params{
 		toreturn.langopt._namespace = getnamespace(params);
 
 		bin2hpp::language lang;
-		lang._cpprev = toreturn.langopt.rev;
+		lang._cpprev = toreturn.langopt._rev;
 
 		overwriteconstspec(params, lang, toreturn.langopt.const_arr, toreturn.langopt.const_size);
 

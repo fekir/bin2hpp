@@ -67,14 +67,28 @@ namespace bin2hpp{
 		}
 	}
 
+	inline bool has_constexpxr(const cpprev r){
+		return (r != cpprev::cpp98) && (r != cpprev::cpp03);
+	}
+
+	inline bool has_stdarr(const cpprev r){
+		return has_constexpxr(r); // both where introduced with c++11
+	}
+
 	struct langoptionscpp{
-		bin2hpp::cpprev rev = bin2hpp::cpprev::cpp11;
-        //bool usestdarray = true;
-        bin2hpp::resource_type_cpp res = bin2hpp::resource_type_cpp::std_arr;
-		bin2hpp::constid_array const_arr = bin2hpp::constid_array::_constexpr;
-		bin2hpp::constid_size const_size = bin2hpp::constid_size::_constexpr;
+		bin2hpp::cpprev _rev;
+		bin2hpp::resource_type_cpp res;
+		bin2hpp::constid_array const_arr;
+		bin2hpp::constid_size const_size;
 		bool usepragma = false;
 		std::string _namespace = defaultnamespace;
+		langoptionscpp(const cpprev rev = cpprev::cpp17) :
+		    _rev(rev),
+		    res(has_stdarr(rev) ? resource_type_cpp::std_arr : resource_type_cpp::c_arr),
+		    const_arr(has_constexpxr(rev) ? constid_array::_constexpr : constid_array::_const),
+		    const_size(has_constexpxr(rev) ? constid_size::_constexpr : constid_size::_const)
+		{
+		}
 	};
 
 	struct langoptionsc{

@@ -9,7 +9,6 @@
 
 
 
-#
 int main(int argc, char *argv[]){
 	auto cmdline = params::cmdlinetovector(argc, argv);
 
@@ -20,7 +19,7 @@ int main(int argc, char *argv[]){
 
 	if(lang.id == bin2hpp::lang_id::cpp) {
 
-		auto defaultsettings = params::defaultsettingcpp(lang);
+		auto defaultsettings = bin2hpp::langoptionscpp(lang._cpprev);
 		auto par = params::parsecmdlinecpp(cmdline, defaultsettings);
 		for (size_t i = 0; i != par.in.size(); i++) {
 			std::ifstream input(par.in.at(i));
