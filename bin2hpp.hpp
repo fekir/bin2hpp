@@ -255,8 +255,12 @@ namespace bin2hpp{
 		if(op.usepragma){
 			out << "#pragma once\n\n";
 		} else {
-			static int ii = 0;
-			const std::string header = "HEADER_"+variablename+"_"+std::to_string(ii++); // fixme: add timestamp and all uppercase (like vs...)
+			// fixme --> uni as external dependency to unittest
+			std::random_device rd;     // only used once to initialise (seed) engine
+			std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+			std::uniform_int_distribution<int> uni(0,std::numeric_limits<int>::max()); // guaranteed unbiased
+			auto random_integer = uni(rng);
+			const std::string header = "HEADER_"+variablename+"_" +std::to_string(random_integer);
 			out << "#ifndef " << header << "\n";
 			out << "#define " << header << "\n\n";
 		}
