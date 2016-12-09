@@ -334,15 +334,6 @@ namespace params{
 		return true;
 	}
 
-
-	inline bin2hpp::langoptionsc defaultsettingc(const bin2hpp::language rev){
-		assert(rev.id == bin2hpp::lang_id::c && " wrong language");
-
-		bin2hpp::langoptionsc toreturn;
-		toreturn.rev = rev._crev;
-		return toreturn;
-	}
-
 	inline void overwriteconstspec(std::vector<std::string>& params, const bin2hpp::language& constspec, bin2hpp::constid_array& c_arr, bin2hpp::constid_size& c_siz ){
 		const auto itinend       = std::find(params.begin(), params.end(), options::in);
 

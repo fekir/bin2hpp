@@ -92,11 +92,12 @@ namespace bin2hpp{
 	};
 
 	struct langoptionsc{
-		bin2hpp::crev rev = bin2hpp::crev::c11;
+		bin2hpp::crev rev;
 		bin2hpp::constid_array const_arr = bin2hpp::constid_array::_const;
 		bin2hpp::constid_size const_size = bin2hpp::constid_size::_enum;
 		bool usepragma = false;
 		std::string _namespace = defaultnamespace;
+		explicit langoptionsc(const bin2hpp::crev rev_ = bin2hpp::crev::c11) : rev(rev_){}
 	};
 
 	inline std::string getID(constid_size id){
