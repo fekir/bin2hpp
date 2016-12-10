@@ -17,7 +17,7 @@ TEST_CASE("getconstgeneric1", "[const][array][size][parameters]"){
 	std::vector<std::string> cmdline = { options::standard+rev::cpp03, options::constspec+bin2hpp::constid::_constexpr};
 	auto lang = params::getlanguage(cmdline);
 
-	bin2hpp::langoptionscpp langopt;
+	bin2hpp::lang_options_cpp langopt;
 
 	REQUIRE_THROWS_AS(overwriteconstspec(cmdline, lang, langopt.const_arr, langopt.const_size), std::runtime_error);
 }
@@ -26,7 +26,7 @@ TEST_CASE("getconstgeneric2", "[const][array][size][parameters]"){
 	std::vector<std::string> cmdline = { options::standard+rev::c11, options::constspec+bin2hpp::constid::_constexpr};
 	auto lang = params::getlanguage(cmdline);
 
-	bin2hpp::langoptionsc langopt;
+	bin2hpp::lang_options_c langopt;
 
 	REQUIRE_THROWS_AS(overwriteconstspec(cmdline, lang, langopt.const_arr, langopt.const_size), std::runtime_error);
 }
@@ -35,7 +35,7 @@ TEST_CASE("getconstgeneric3", "[const][array][size][parameters]"){
 	std::vector<std::string> cmdline = { options::standard+rev::c11, options::constspec+bin2hpp::constid::_const};
 	auto lang = params::getlanguage(cmdline);
 
-	bin2hpp::langoptionsc langopt;
+	bin2hpp::lang_options_c langopt;
 
 	overwriteconstspec(cmdline, lang, langopt.const_arr, langopt.const_size);
 

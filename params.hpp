@@ -438,15 +438,15 @@ namespace params{
 		return true; // no option specified, use the default one
 	}
 
-	struct parameters{
-		bin2hpp::langoptionscpp langopt; // fixme--> move to an union?
+	struct parameters_cpp{
+		bin2hpp::lang_options_cpp langopt; // fixme--> move to an union?
 		std::vector<std::string> in;
 		std::vector<std::string> names;
 		std::vector<std::string> out;
 	};
 
-	struct parametersc{
-		bin2hpp::langoptionsc langopt; // fixme--> move to an union?
+	struct parameters_c{
+		bin2hpp::lang_options_c langopt; // fixme--> move to an union?
 		std::vector<std::string> in;
 		std::vector<std::string> names;
 		std::vector<std::string> out;
@@ -454,8 +454,8 @@ namespace params{
 
 
 	// throws if configuration is 'bad' --> invalid arguments or unrecognized parameters
-	inline parameters parsecmdlinecpp(std::vector<std::string> params, bin2hpp::langoptionscpp defaultsettings){
-		parameters toreturn;
+	inline parameters_cpp parsecmdlinecpp(std::vector<std::string> params, bin2hpp::lang_options_cpp defaultsettings){
+		parameters_cpp toreturn;
 
 		toreturn.langopt = defaultsettings;
 
@@ -484,8 +484,8 @@ namespace params{
 		return toreturn;
 	}
 
-	inline parametersc parsecmdlinec(std::vector<std::string> params, bin2hpp::langoptionsc defaultsettings){
-		parametersc toreturn;
+	inline parameters_c parsecmdlinec(std::vector<std::string> params, bin2hpp::lang_options_c defaultsettings){
+		parameters_c toreturn;
 
 		toreturn.langopt = defaultsettings;
 

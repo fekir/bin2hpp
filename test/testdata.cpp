@@ -48,6 +48,6 @@ TEST_CASE("file1","[]"){
 	in << "Hello World!";
 	std::ofstream out("/tmp/data2.h");
 
-	bin2hpp::langoptionscpp langopt;
+	bin2hpp::lang_options_cpp langopt;
 	bin2hpp::create_file(in, langopt, "varname", out);
 }

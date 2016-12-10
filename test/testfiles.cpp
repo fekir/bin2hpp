@@ -17,7 +17,7 @@ using namespace params;
 TEST_CASE("testfiledoesnotexist", "[]"){
     std::ifstream input(""); // hopefully does not exist
     std::stringstream output;
-    bin2hpp::langoptionsc langop;
+    bin2hpp::lang_options_c langop;
     REQUIRE_THROWS_AS(bin2hpp::create_file(input, langop, "", output), std::runtime_error);
 }
 

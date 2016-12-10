@@ -75,14 +75,14 @@ namespace bin2hpp{
 		return has_constexpxr(r); // both where introduced with c++11
 	}
 
-	struct langoptionscpp{
+	struct lang_options_cpp{
 		bin2hpp::cpprev _rev;
 		bin2hpp::resource_type_cpp res;
 		bin2hpp::constid_array const_arr;
 		bin2hpp::constid_size const_size;
 		bool usepragma = false;
 		std::string _namespace = defaultnamespace;
-		langoptionscpp(const cpprev rev = cpprev::cpp17) :
+		lang_options_cpp(const cpprev rev = cpprev::cpp17) :
 		    _rev(rev),
 		    res(has_stdarr(rev) ? resource_type_cpp::std_arr : resource_type_cpp::c_arr),
 		    const_arr(has_constexpxr(rev) ? constid_array::_constexpr : constid_array::_const),
@@ -91,13 +91,13 @@ namespace bin2hpp{
 		}
 	};
 
-	struct langoptionsc{
+	struct lang_options_c{
 		bin2hpp::crev rev;
 		bin2hpp::constid_array const_arr = bin2hpp::constid_array::_const;
 		bin2hpp::constid_size const_size = bin2hpp::constid_size::_enum;
 		bool usepragma = false;
 		std::string _namespace = defaultnamespace;
-		explicit langoptionsc(const bin2hpp::crev rev_ = bin2hpp::crev::c11) : rev(rev_){}
+		explicit lang_options_c(const bin2hpp::crev rev_ = bin2hpp::crev::c11) : rev(rev_){}
 	};
 
 	inline std::string getID(constid_size id){
@@ -185,7 +185,7 @@ namespace bin2hpp{
 		out << "};\n";
 	}
 
-	inline void create_file(std::istream& in, const langoptionscpp& op, const std::string& variablename, std::ostream& out) {
+	inline void create_file(std::istream& in, const lang_options_cpp& op, const std::string& variablename, std::ostream& out) {
 
 		if(op.usepragma){
 			out << "#pragma once\n\n";
@@ -251,7 +251,7 @@ namespace bin2hpp{
 
 	}
 
-	inline void create_file(std::istream& in, const langoptionsc& op, const std::string& variablename, std::ostream& out) {
+	inline void create_file(std::istream& in, const lang_options_c& op, const std::string& variablename, std::ostream& out) {
 
 		if(op.usepragma){
 			out << "#pragma once\n\n";

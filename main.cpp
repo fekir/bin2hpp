@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
 
 	if(lang.id == bin2hpp::lang_id::cpp) {
 
-		auto defaultsettings = bin2hpp::langoptionscpp(lang._cpprev);
+		auto defaultsettings = bin2hpp::lang_options_cpp(lang._cpprev);
 		auto par = params::parsecmdlinecpp(cmdline, defaultsettings);
 		for (size_t i = 0; i != par.in.size(); i++) {
 			std::ifstream input(par.in.at(i));
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
 
 	} else if(lang.id == bin2hpp::lang_id::c){
 
-		auto defaultsettings = bin2hpp::langoptionsc(lang._crev);
+		auto defaultsettings = bin2hpp::lang_options_c(lang._crev);
 		auto par = params::parsecmdlinec(cmdline, defaultsettings);
 		for (size_t i = 0; i != par.in.size(); i++) {
 			std::ifstream input(par.in.at(i));
