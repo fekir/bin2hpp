@@ -49,6 +49,6 @@ add_custom_command(
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-add_subdirectory(CPP)
-add_subdirectory(C)
+add_subdirectory(cpp)
+add_subdirectory(c)
 

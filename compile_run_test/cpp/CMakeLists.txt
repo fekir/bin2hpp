@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required(VERSION 3.2)
 
-project(bin2hppTestCompileCPP CXX)
+project(bin2hpp_test_compile_cpp CXX)
 
 include_directories(${OUT_DIR_CPP})
 include_directories(${OUT_DIR_C})

@@ -37,12 +37,12 @@ set(TEST_FILES test/maintest.cpp
 	test/testfiles.cpp
 )
 
-add_executable(${PROJECT_NAME}Test
+add_executable(${PROJECT_NAME}_test
 	${HEADER_FILES} ${SOURCE_FILES} ${TEST_FILES}
 )
 #add_dependencies(${PROJECT_NAME}Test catch)
-add_dependencies(${PROJECT_NAME}Test ${PROJECT_NAME})
-set_property(TARGET ${PROJECT_NAME}Test PROPERTY CXX_STANDARD 14)
+add_dependencies(${PROJECT_NAME}_test ${PROJECT_NAME})
+set_property(TARGET ${PROJECT_NAME}_test PROPERTY CXX_STANDARD 14)
 add_test(test1 ${PROJECT_NAME}Test)
 # Copy data used for testing
 #file(COPY "extern/data/" DESTINATION "/tmp/testfilediggerdir")
