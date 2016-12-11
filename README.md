@@ -27,8 +27,10 @@ Usage: bin2hpp [options] -in [input files] -names [optional names] -out [optiona
         for specifying const id of size.
     -constarr= <const-id>
         for specifying const id of array.
-    -stdarr= <true/false>
-        (only c++) for specifying if using std::array or a plain old and unsafe array.
+    -varttype= <vartype>
+        for c++: std::array, std::string
+        for c and c++: c_arr, c_str
+        for java: byte[], Byte[], String
     -in <list-input-files>
          list of input files, separated by space.
     -out <list-output-files>

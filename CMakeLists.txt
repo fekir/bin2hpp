@@ -5,7 +5,7 @@ find_package(catch REQUIRED)
 
 project(bin2hpp CXX)
 set (PROJ1_VERSION_MAJOR 0)
-set (PROJ1_VERSION_MINOR 7)
+set (PROJ1_VERSION_MINOR 8)
 
 ##########################################################
 # Program Options/settings                               #

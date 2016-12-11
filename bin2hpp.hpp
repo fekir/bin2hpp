@@ -39,12 +39,73 @@ namespace bin2hpp{
 
 	enum class resource_type_cpp{std_arr, c_arr, std_string, c_string};
 	enum class resource_type_c{c_arr, c_string};
-	enum class resource_type_java{byte_arr, Byte_arr, obj_arr, jstring};
+	enum class resource_type_java{byte_arr, Byte_arr, String, list};
 
 	namespace constid {
 		const std::string _enum       = "enum";
 		const std::string _const      = "const";
 		const std::string _constexpr  = "constexpr";
+	}
+
+	namespace array_id {
+		// c++
+		const std::string _std_arr     = "std::array";
+		const std::string _std_string  = "std::string";
+		// c and c++
+		const std::string _c_arr       = "c_arr";
+		const std::string _c_string    = "c_str";
+		// java
+		const std::string _byte_arr    = "byte[]";
+		const std::string _Byte_arr    = "Byte[]";
+		const std::string _string      = "String";
+		const std::string _list        = "List<Byte>";
+
+		inline resource_type_c to_res_type_c(const std::string& res){
+			if(res == _c_arr){
+				return resource_type_c::c_arr;
+			}
+			if(res == _c_string){
+				return resource_type_c::c_string;
+			}
+			throw std::runtime_error("no valid cpp resource type");
+		}
+
+		inline resource_type_cpp to_res_type_cpp(const std::string& res){
+			if(res == _std_arr){
+				return resource_type_cpp::std_arr;
+			}
+			if(res == _std_string){
+				return resource_type_cpp::std_string;
+			}
+			if(res == _c_arr){
+				return resource_type_cpp::c_arr;
+			}
+			if(res == _c_string){
+				return resource_type_cpp::c_string;
+			}
+			throw std::runtime_error("no valid cpp resource type");
+		}
+
+		inline resource_type_java to_res_type_java(const std::string& res){
+			if(res == _byte_arr){
+				return resource_type_java::byte_arr;
+			}
+			if(res == _byte_arr){
+				return resource_type_java::Byte_arr;
+			}
+			if(res == _byte_arr){
+				return resource_type_java::String;
+			}
+			if(res == _byte_arr){
+				return resource_type_java::list;
+			}
+			throw std::runtime_error("no valid java resource type");
+
+			const std::string _byte_arr    = "byte[]";
+			const std::string _Byte_arr    = "Byte[]";
+			const std::string _string      = "String";
+			const std::string _list        = "List";
+		}
 	}
 
 	struct language{
@@ -68,11 +129,15 @@ namespace bin2hpp{
 	}
 
 	inline bool has_constexpxr(const cpp_rev r){
-		return (r != cpp_rev::cpp98) && (r != cpp_rev::cpp03);
+		return r >= cpp_rev::cpp11;
 	}
 
 	inline bool has_stdarr(const cpp_rev r){
 		return has_constexpxr(r); // both where introduced with c++11
+	}
+
+	inline bool has_generics(const java_rev r){
+		return r >= java_rev::j1_5;
 	}
 
 	struct lang_options_cpp{
@@ -100,6 +165,13 @@ namespace bin2hpp{
 		explicit lang_options_c(const bin2hpp::c_rev rev_ = bin2hpp::c_rev::c11) : rev(rev_){}
 	};
 
+	struct lang_options_java{
+		bin2hpp::java_rev rev;
+		bin2hpp::resource_type_java res = bin2hpp::resource_type_java::byte_arr;
+		std::string _namespace = defaultnamespace;
+		explicit lang_options_java(const bin2hpp::java_rev rev_ = bin2hpp::java_rev::j1_9) : rev(rev_){}
+	};
+
 	inline std::string constid_tostr(constid_size id){
 		switch(id){
 			case constid_size::_const: return constid::_const;
@@ -112,7 +184,8 @@ namespace bin2hpp{
 
 	// crea sequenza " 0xAB,0xCD,... " ritorna lunghezza dell'array
 	// fixme: controllare se servono cast per alcuni warnings
-	inline size_t convertstreamtohexnotation(std::istream& in, std::ostream& out){
+	enum class format{c, java_byte, java_Byte, string};
+	inline size_t convertstreamtohexnotation(std::istream& in, std::ostream& out, const format f = format::c){
 		size_t totalsize = {};
 
 		std::array<unsigned char, 1024> buffer;
@@ -133,7 +206,11 @@ namespace bin2hpp{
 			//if(in.) --> check se qualcosa andato male
 			for(auto i = decltype(unsigned_readed){0} ; i != unsigned_readed; ++i){
 				auto c = hexutils::to_hex(buffer.at(i));
-				out << "'\\x" << c[0] << c[1] << "',";
+				if(f == format::c){
+					out << "'\\x" << c[0] << c[1] << "',"; // fixme: format should be specified with out param...
+				} else if (f == format::java_byte){
+					out << "(byte)0x" << c[0] << c[1] << ","; // fixme: format should be specified with out param...
+				}
 			}
 			int a = 1;
 		}
@@ -185,6 +262,12 @@ namespace bin2hpp{
 		out << "};\n";
 	}
 
+	inline void create_byte_array(std::istream& in, const std::string& variablename, std::ostream& out){
+		out << "public static final byte[] " << variablename << " = { ";
+		convertstreamtohexnotation(in, out, format::java_byte);
+		out << "};\n";
+	}
+
 	inline void create_file(std::istream& in, const lang_options_cpp& op, const std::string& variablename, std::ostream& out) {
 
 		if(op.usepragma){
@@ -202,19 +285,19 @@ namespace bin2hpp{
 		out << "// " << comment << "\n\n";
 
 		switch (op.res) {
-		case bin2hpp::resource_type_cpp::std_arr:
-			out << "#include <array>\n\n";
-			break;
-		case bin2hpp::resource_type_cpp::std_string:
-			out << "#include <string>\n\n";
-			break;
-		case bin2hpp::resource_type_cpp::c_arr:
-		case bin2hpp::resource_type_cpp::c_string:
-			out << "#include <cstddef>\n\n";
-			break;
-		default:
-			assert(false);
-			break;
+			case bin2hpp::resource_type_cpp::std_arr:
+				out << "#include <array>\n\n";
+				break;
+			case bin2hpp::resource_type_cpp::std_string:
+				out << "#include <string>\n\n";
+				break;
+			case bin2hpp::resource_type_cpp::c_arr:
+			case bin2hpp::resource_type_cpp::c_string:
+				out << "#include <cstddef>\n\n";
+				break;
+			default:
+				assert(false);
+				break;
 		}
 
 		if(!op._namespace.empty()){
@@ -222,21 +305,21 @@ namespace bin2hpp{
 		}
 
 		switch (op.res) {
-		case bin2hpp::resource_type_cpp::std_arr:
-			create_std_array(in, variablename, op.const_arr, out);
-			break;
-		case bin2hpp::resource_type_cpp::std_string:
-			create_std_string(in, variablename, op.const_arr, out);
-			break;
-		case bin2hpp::resource_type_cpp::c_arr:
-			create_c_array(in, variablename, op.const_arr, op.const_size, true, out);
-			break;
-		case bin2hpp::resource_type_cpp::c_string:
-			create_c_array(in, variablename, op.const_arr, op.const_size, true, out);
-			break;
-		default:
-			assert(false);
-			break;
+			case bin2hpp::resource_type_cpp::std_arr:
+				create_std_array(in, variablename, op.const_arr, out);
+				break;
+			case bin2hpp::resource_type_cpp::std_string:
+				create_std_string(in, variablename, op.const_arr, out);
+				break;
+			case bin2hpp::resource_type_cpp::c_arr:
+				create_c_array(in, variablename, op.const_arr, op.const_size, true, out);
+				break;
+			case bin2hpp::resource_type_cpp::c_string:
+				create_c_array(in, variablename, op.const_arr, op.const_size, true, out);
+				break;
+			default:
+				assert(false);
+				break;
 		}
 
 		// close namespace
@@ -282,6 +365,17 @@ namespace bin2hpp{
 		if(!op.usepragma){
 			out << "\n#endif\n";
 		}
+
+	}
+
+	inline void create_file(std::istream& in, const lang_options_java& op, const std::string& variablename, const std::string& package, std::ostream& out) {
+		if(!package.empty()){
+			out << "package " << package << ";\n";
+		}
+		out << "// " << comment << "\n\n";
+		out << "class " << op._namespace << "{\n";
+		create_byte_array(in, variablename, out);
+		out << "}\n\n";
 
 	}
 

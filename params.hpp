@@ -40,7 +40,7 @@ namespace params{
 		const std::string constspec  = "-const=";     // const, constexpr
 		const std::string constsize  = "-constsize="; // enum, const, constexpr
 		const std::string constarray = "-constarr=";  // const, constexpr
-		const std::string stdarr     = "-stdarr=";    // true/false
+		const std::string vartype    = "-vartype=";   // std::array, c_array, string, ...
 
 		const std::string in       = "-in";
 		const std::string out      = "-out";
@@ -59,14 +59,14 @@ namespace params{
 		const std::string c89   = "c89";
 		const std::string c99   = "c99";
 		const std::string c11   = "c11";
-		const std::string j     = "j";
-		const std::string j1_3  = "j1.3";
-		const std::string j1_4  = "j1.4";
-		const std::string j1_5  = "j1.5";
-		const std::string j1_6  = "j1.6";
-		const std::string j1_7  = "j1.7";
-		const std::string j1_8  = "j1.8";
-		const std::string j1_9  = "j1.9";
+		const std::string j     = "java";
+		const std::string j1_3  = "java1.3";
+		const std::string j1_4  = "java1.4";
+		const std::string j1_5  = "java1.5";
+		const std::string j1_6  = "java1.6";
+		const std::string j1_7  = "java1.7";
+		const std::string j1_8  = "java1.8";
+		const std::string j1_9  = "java1.9";
 	}
 
 	/// does not store argc[0]
@@ -179,7 +179,7 @@ namespace params{
 		out << indent << indent << "for specifying language and/or language revision, for example " << options::standard << rev::cpp11 << ".\n";
 		out << indent << indent << "Valid revisions for c++ are:  " << rev::cpp << ", " << rev::cpp98 << ", " << rev::cpp03 << ", " << rev::cpp11 << ", " << rev::cpp14 << ", " << rev::cpp17 << "\n";
 		out << indent << indent << "Valid revisions for c are:    " << rev::c << ", " << rev::c89 << ", " << rev::c99 << ", " << rev::c11 << "\n";
-		out << indent << indent << "Valid revisions for java are: " << rev::j << ", " << rev::j1_3 << ", " << rev::j1_4 << ", " << rev::j1_5 << ", " << rev::j1_6 << ", " << rev::j1_7 << rev::j1_8 << ", " << rev::j1_9 << "\n";
+		out << indent << indent << "Valid revisions for java are: " << rev::j << ", " << rev::j1_3 << ", " << rev::j1_4 << ", " << rev::j1_5 << ", " << rev::j1_6 << ", " << rev::j1_7 << ", " << rev::j1_8 << ", " << rev::j1_9 << "\n";
 
 		out << indent << options::constspec << " <const-id>\n";
 		out << indent << indent << "for specifying const id of array and size.\n";
@@ -190,8 +190,11 @@ namespace params{
 		out << indent << options::constarray << " <const-id>\n";
 		out << indent << indent << "for specifying const id of array.\n";
 
-		out << indent << options::stdarr << " <true/false>\n";
-		out << indent << indent << "(only c++) for specifying if using std::array or a plain old and \"unsafe\" array.\n";
+		out << indent << options::vartype << "<vartype>\n";
+		out << indent << indent << "for c++:       " << bin2hpp::array_id::_std_arr << ", " << bin2hpp::array_id::_std_string << "\n";
+		out << indent << indent << "for c and c++: " << bin2hpp::array_id::_c_arr << ", " << bin2hpp::array_id::_c_string << "\n";
+		out << indent << indent << "for java:      " << bin2hpp::array_id::_byte_arr << ", "
+		    << bin2hpp::array_id::_Byte_arr << ", " << bin2hpp::array_id::_string << ", " << bin2hpp::array_id::_list << "\n";
 
 		out << indent << options::in << " <list-input-files>\n";
 		out << indent << indent << " list of input files, separated by space.\n";
@@ -223,14 +226,14 @@ namespace params{
 	inline std::string getnamespace(std::vector<std::string>& params){
 		const auto itinend = std::find(params.begin(), params.end(), options::in);
 		const auto it   = std::find_if(params.begin(), itinend, [](const std::string& s){return begins_with(s, options::ns);});
-		if( it != itinend ) {
-			assert(it->length() >= options::ns.length());
-			std::string toreturn = it->substr(options::ns.length()); // fixme: validate namespace
-			params.erase(it);
-			return toreturn;
+		if( it == itinend ) {
+			return bin2hpp::defaultnamespace;
 		}
 
-		return bin2hpp::defaultnamespace;
+		assert(it->length() >= options::ns.length() && "impossible since it should contain at least options::ns");
+		std::string toreturn = it->substr(options::ns.length()); // fixme: validate namespace
+		params.erase(it);
+		return toreturn;
 	}
 
 	inline std::vector<std::string> getinfiles(std::vector<std::string>& params){
@@ -257,6 +260,7 @@ namespace params{
 		return toreturn;
 	}
 
+	// replace invalid chars with '_'
 	inline std::string tovarname(const std::string& filename){
 		const size_t lastSlashIndex = filename.find_last_of("/\\");
 		std::string var = filename.substr(lastSlashIndex + 1);
@@ -282,12 +286,14 @@ namespace params{
 
 		const auto itend = std::find(params.begin(), params.end(), options::out);
 		const auto numberofelements = std::distance(it+1, itend);
-		if(numberofelements != in.size()){
+		assert(numberofelements>0);
+		auto numberofelements_pos = static_cast<decltype(in.size())>(numberofelements);
+		if(numberofelements_pos != in.size()){
 			throw std::runtime_error("invalid # of names");
 		}
 
 		std::vector<std::string> toreturn;
-		toreturn.reserve(numberofelements);
+		toreturn.reserve(numberofelements_pos);
 		for(auto i = it +1; i != itend; ++i){
 			if(i->empty()){// fixme: validate filenames...
 				throw std::runtime_error("invalid name");
@@ -308,12 +314,14 @@ namespace params{
 
 		const auto itend = params.end();
 		const auto numberofelements = std::distance(it+1, itend);
-		if(numberofelements != in.size() && numberofelements != 1){
+		assert(numberofelements >= 0);
+		const auto numberofelements_pos = static_cast<decltype(in.size())>(numberofelements);
+		if(numberofelements_pos != in.size() && numberofelements != 1){
 			throw std::runtime_error("invalid # of files");
 		}
 
 		std::vector<std::string> toreturn;
-		toreturn.reserve(numberofelements);
+		toreturn.reserve(numberofelements_pos);
 		for(auto i = it +1; i != itend; ++i){
 			if(i->empty()){// fixme: validate filenames...
 				throw std::runtime_error("invalid filename");
@@ -416,27 +424,42 @@ namespace params{
 		}
 	}
 
-	// only for c++
-	inline bool overwritearrayspec(std::vector<std::string>& params, bin2hpp::language){
+	inline void overwrite_vartype(std::vector<std::string>& params, bin2hpp::resource_type_cpp& res){
 		const auto itinend   = std::find(   params.begin(), params.end(), options::in);
 		const auto ituseaarr = std::find_if(params.begin(), itinend,
-		  [](const std::string& s){return begins_with(s, options::stdarr);}
+		  [](const std::string& s){return begins_with(s, options::vartype);}
 		);
 
-		if(ituseaarr!=itinend){
-			std::string usearr = ituseaarr->substr(options::stdarr.length());
-			if(usearr == "true"){
-				params.erase(ituseaarr);
-				return true;
-			} else if(usearr == "false"){
-				params.erase(ituseaarr);
-				return false;
-			}
-			throw std::runtime_error("use stdarr without valid option");
+		if(ituseaarr==itinend){
+			return;
 		}
 
-		return true; // no option specified, use the default one
+		assert((ituseaarr->size() >= options::vartype.size()) && "impossible since it should contain at least options::vartype");
+
+		const std::string restype = ituseaarr->substr(options::vartype.length());
+		res = bin2hpp::array_id::to_res_type_cpp(restype);
+
+		params.erase(ituseaarr);
 	}
+
+	inline void overwrite_vartype(std::vector<std::string>& params, bin2hpp::resource_type_java& res){
+		const auto itinend   = std::find(   params.begin(), params.end(), options::in);
+		const auto ituseaarr = std::find_if(params.begin(), itinend,
+		  [](const std::string& s){return begins_with(s, options::vartype);}
+		);
+
+		if(ituseaarr==itinend){
+			return;
+		}
+
+		assert((ituseaarr->size() >= options::vartype.size()) && "impossible since it should contain at least options::vartype");
+
+		const std::string restype = ituseaarr->substr(options::vartype.length());
+		res = bin2hpp::array_id::to_res_type_java(restype);
+
+		params.erase(ituseaarr);
+	}
+
 
 	struct parameters_cpp{
 		bin2hpp::lang_options_cpp langopt; // fixme--> move to an union?
@@ -447,6 +470,13 @@ namespace params{
 
 	struct parameters_c{
 		bin2hpp::lang_options_c langopt; // fixme--> move to an union?
+		std::vector<std::string> in;
+		std::vector<std::string> names;
+		std::vector<std::string> out;
+	};
+
+	struct parameters_java{
+		bin2hpp::lang_options_java langopt; // fixme--> move to an union?
 		std::vector<std::string> in;
 		std::vector<std::string> names;
 		std::vector<std::string> out;
@@ -468,7 +498,7 @@ namespace params{
 		overwriteconstspec(params, lang, toreturn.langopt.const_arr, toreturn.langopt.const_size);
 
 		// fixme: add param for other options (string)
-		toreturn.langopt.res = overwritearrayspec(params, lang) ? bin2hpp::resource_type_cpp::std_arr : bin2hpp::resource_type_cpp::c_arr;
+		overwrite_vartype(params, toreturn.langopt.res);
 
 		toreturn.langopt.usepragma = usepragma(params);
 
@@ -498,6 +528,32 @@ namespace params{
 		overwriteconstspec(params, lang, toreturn.langopt.const_arr, toreturn.langopt.const_size);
 
 		toreturn.langopt.usepragma = usepragma(params);
+
+		// inputs
+		toreturn.in = getinfiles(params);
+
+		// names
+		toreturn.names = getvarnames(toreturn.in, params);
+
+		// outputs
+		toreturn.out = getoutfiles(toreturn.in, params);
+
+		return toreturn;
+	}
+
+	inline parameters_java parsecmdline_java(std::vector<std::string> params, bin2hpp::lang_options_java defaultsettings){
+		parameters_java toreturn;
+
+		toreturn.langopt = defaultsettings;
+
+		// namespace
+		toreturn.langopt._namespace = getnamespace(params);
+
+		bin2hpp::language lang;
+		lang._javarev = toreturn.langopt.rev;
+
+		// fixme: add param for other options (string)
+		overwrite_vartype(params, toreturn.langopt.res);
 
 		// inputs
 		toreturn.in = getinfiles(params);

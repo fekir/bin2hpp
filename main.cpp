@@ -39,10 +39,18 @@ int main(int argc, char *argv[]){
 			bin2hpp::create_file(input, par.langopt, par.names.at(i), output);
 		}
 
-	} else {
-		std::cerr << "java is not supported yet!\n";
-	return 1;
-}
+	} else if(lang.id == bin2hpp::lang_id::java){
+		auto defaultsettings = bin2hpp::lang_options_java(lang._javarev);
+		auto par = params::parsecmdline_java(cmdline, defaultsettings);
+		for (size_t i = 0; i != par.in.size(); i++) {
+			std::ifstream input(par.in.at(i));
+			std::ofstream output(par.out.at(i));
 
-return 0;
+			bin2hpp::create_file(input, par.langopt, par.names.at(i), "", output);
+		}
+
+	} else {
+		assert(false && "unrecognized language");
+	}
+	return 0;
 }
