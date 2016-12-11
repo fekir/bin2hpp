@@ -32,9 +32,9 @@ namespace bin2hpp{
 	const std::string defaultnamespace = "resource";
 
 	enum class lang_id{ cpp, c, java };
-	enum class cpprev{ cpp98, cpp03, cpp11, cpp14, cpp17};
-	enum class crev{ c89, c99, c11};
-	enum class javarev{j1_3, j1_4, j1_5, j1_6, j1_7, j1_8, j1_9};
+	enum class cpp_rev{ cpp98, cpp03, cpp11, cpp14, cpp17};
+	enum class c_rev{ c89, c99, c11};
+	enum class java_rev{j1_3, j1_4, j1_5, j1_6, j1_7, j1_8, j1_9};
 
 
 	enum class resource_type_cpp{std_arr, c_arr, std_string, c_string};
@@ -50,16 +50,16 @@ namespace bin2hpp{
 	struct language{
 		lang_id id = lang_id::cpp;
 		union{
-			cpprev  _cpprev   = cpprev::cpp17;
-			crev    _crev;
-			javarev _javarev;
+			cpp_rev  _cpprev   = cpp_rev::cpp17;
+			c_rev    _crev;
+			java_rev _javarev;
 		};
 	};
 
 	enum class constid_array{ _const, _constexpr};
 	enum class constid_size{ _const, _constexpr, _enum};
 
-	inline std::string getID(constid_array id){
+	inline std::string constid_tostr(constid_array id){
 		switch(id){
 			case constid_array::_const: return constid::_const;
 			case constid_array::_constexpr: return constid::_constexpr;
@@ -67,22 +67,22 @@ namespace bin2hpp{
 		}
 	}
 
-	inline bool has_constexpxr(const cpprev r){
-		return (r != cpprev::cpp98) && (r != cpprev::cpp03);
+	inline bool has_constexpxr(const cpp_rev r){
+		return (r != cpp_rev::cpp98) && (r != cpp_rev::cpp03);
 	}
 
-	inline bool has_stdarr(const cpprev r){
+	inline bool has_stdarr(const cpp_rev r){
 		return has_constexpxr(r); // both where introduced with c++11
 	}
 
 	struct lang_options_cpp{
-		bin2hpp::cpprev _rev;
+		bin2hpp::cpp_rev _rev;
 		bin2hpp::resource_type_cpp res;
 		bin2hpp::constid_array const_arr;
 		bin2hpp::constid_size const_size;
 		bool usepragma = false;
 		std::string _namespace = defaultnamespace;
-		lang_options_cpp(const cpprev rev = cpprev::cpp17) :
+		explicit lang_options_cpp(const cpp_rev rev = cpp_rev::cpp17) :
 		    _rev(rev),
 		    res(has_stdarr(rev) ? resource_type_cpp::std_arr : resource_type_cpp::c_arr),
 		    const_arr(has_constexpxr(rev) ? constid_array::_constexpr : constid_array::_const),
@@ -92,15 +92,15 @@ namespace bin2hpp{
 	};
 
 	struct lang_options_c{
-		bin2hpp::crev rev;
+		bin2hpp::c_rev rev;
 		bin2hpp::constid_array const_arr = bin2hpp::constid_array::_const;
 		bin2hpp::constid_size const_size = bin2hpp::constid_size::_enum;
 		bool usepragma = false;
 		std::string _namespace = defaultnamespace;
-		explicit lang_options_c(const bin2hpp::crev rev_ = bin2hpp::crev::c11) : rev(rev_){}
+		explicit lang_options_c(const bin2hpp::c_rev rev_ = bin2hpp::c_rev::c11) : rev(rev_){}
 	};
 
-	inline std::string getID(constid_size id){
+	inline std::string constid_tostr(constid_size id){
 		switch(id){
 			case constid_size::_const: return constid::_const;
 			case constid_size::_constexpr: return constid::_constexpr;
@@ -146,7 +146,7 @@ namespace bin2hpp{
 	inline void create_std_array(std::istream& in, const std::string& variablename, constid_array c_a, std::ostream& out){
 		std::stringstream tmp;
 		const auto size = convertstreamtohexnotation(in, tmp);
-		out << getID(c_a) << " std::array<unsigned char," << size << "> " << variablename << " = {\n";
+		out << constid_tostr(c_a) << " std::array<unsigned char," << size << "> " << variablename << " = {\n";
 		out << tmp.rdbuf() << "\n";
 		out << "};\n";
 	}
@@ -176,11 +176,11 @@ namespace bin2hpp{
 		std::stringstream tmp;
 		const auto size = convertstreamtohexnotation(in, tmp);
 		if(c_s==constid_size::_enum){
-			out << getID(c_s) << (iscpp ? " : std::size_t " : " ") << "{" << variablename << "_size = " << size << "};\n";
+			out << constid_tostr(c_s) << (iscpp ? " : std::size_t " : " ") << "{" << variablename << "_size = " << size << "};\n";
 		} else {
-			out << (iscpp ? "" : "static ") << getID(c_s) << (iscpp ? " std::" : " ") << "size_t " << variablename << "_size = " << size << ";\n";
+			out << (iscpp ? "" : "static ") << constid_tostr(c_s) << (iscpp ? " std::" : " ") << "size_t " << variablename << "_size = " << size << ";\n";
 		}
-		out << (iscpp ? "" : "static ") << getID(c_a) << " unsigned char " << variablename << "[" << size << "] " <<  "= {\n";
+		out << (iscpp ? "" : "static ") << constid_tostr(c_a) << " unsigned char " << variablename << "[" << size << "] " <<  "= {\n";
 		out << tmp.rdbuf() << "\n";
 		out << "};\n";
 	}
@@ -265,7 +265,7 @@ namespace bin2hpp{
 			out << "#ifndef " << header << "\n";
 			out << "#define " << header << "\n\n";
 		}
-		if(op.rev == bin2hpp::crev::c89){
+		if(op.rev == bin2hpp::c_rev::c89){
 			out << "/* " << comment << "*/\n\n";
 		} else {
 			out << "// " << comment << "\n\n";

@@ -89,69 +89,69 @@ namespace params{
 		// cpp
 		toreturn.id = bin2hpp::lang_id::cpp;
 		if(lang==rev::cpp || lang == rev::cpp17){
-			toreturn._cpprev = bin2hpp::cpprev::cpp17;
+			toreturn._cpprev = bin2hpp::cpp_rev::cpp17;
 			return toreturn;
 		}
 		if(lang == rev::cpp98){
-			toreturn._cpprev = bin2hpp::cpprev::cpp98;
+			toreturn._cpprev = bin2hpp::cpp_rev::cpp98;
 			return toreturn;
 		}
 		if(lang == rev::cpp03){
-			toreturn._cpprev = bin2hpp::cpprev::cpp03;
+			toreturn._cpprev = bin2hpp::cpp_rev::cpp03;
 			return toreturn;
 		}
 		if(lang == rev::cpp11){
-			toreturn._cpprev = bin2hpp::cpprev::cpp11;
+			toreturn._cpprev = bin2hpp::cpp_rev::cpp11;
 			return toreturn;
 		}
 		if(lang == rev::cpp14){
-			toreturn._cpprev = bin2hpp::cpprev::cpp14;
+			toreturn._cpprev = bin2hpp::cpp_rev::cpp14;
 			return toreturn;
 		}
 
 		// c
 		toreturn.id = bin2hpp::lang_id::c;
 		if(lang==rev::c || lang == rev::c11){
-			toreturn._crev = bin2hpp::crev::c11;
+			toreturn._crev = bin2hpp::c_rev::c11;
 			return toreturn;
 		}
 		if(lang == rev::c89){
-			toreturn._crev = bin2hpp::crev::c89;
+			toreturn._crev = bin2hpp::c_rev::c89;
 			return toreturn;
 		}
 		if(lang == rev::c99){
-			toreturn._crev = bin2hpp::crev::c99;
+			toreturn._crev = bin2hpp::c_rev::c99;
 			return toreturn;
 		}
 
 		// java
 		toreturn.id = bin2hpp::lang_id::java;
 		if(lang==rev::j || lang == rev::j1_9){
-			toreturn._javarev = bin2hpp::javarev::j1_9;
+			toreturn._javarev = bin2hpp::java_rev::j1_9;
 			return toreturn;
 		}
 		if(lang == rev::j1_3){
-			toreturn._javarev = bin2hpp::javarev::j1_3;
+			toreturn._javarev = bin2hpp::java_rev::j1_3;
 			return toreturn;
 		}
 		if(lang == rev::j1_4){
-			toreturn._javarev = bin2hpp::javarev::j1_4;
+			toreturn._javarev = bin2hpp::java_rev::j1_4;
 			return toreturn;
 		}
 		if(lang == rev::j1_5){
-			toreturn._javarev = bin2hpp::javarev::j1_5;
+			toreturn._javarev = bin2hpp::java_rev::j1_5;
 			return toreturn;
 		}
 		if(lang == rev::j1_6){
-			toreturn._javarev = bin2hpp::javarev::j1_6;
+			toreturn._javarev = bin2hpp::java_rev::j1_6;
 			return toreturn;
 		}
 		if(lang == rev::j1_7){
-			toreturn._javarev = bin2hpp::javarev::j1_7;
+			toreturn._javarev = bin2hpp::java_rev::j1_7;
 			return toreturn;
 		}
 		if(lang == rev::j1_8){
-			toreturn._javarev = bin2hpp::javarev::j1_8;
+			toreturn._javarev = bin2hpp::java_rev::j1_8;
 			return toreturn;
 		}
 

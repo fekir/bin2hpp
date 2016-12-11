@@ -48,35 +48,35 @@ TEST_CASE("getlanguage1", "[language][parameters]"){
 	std::vector<std::string> cmdline = { };
 	auto lang = params::getlanguage(cmdline);
 	REQUIRE(lang.id == bin2hpp::lang_id::cpp);
-	REQUIRE(lang._cpprev == bin2hpp::cpprev::cpp17);
+	REQUIRE(lang._cpprev == bin2hpp::cpp_rev::cpp17);
 }
 
 TEST_CASE("getlanguage2", "[language][parameters]"){
 	std::vector<std::string> cmdline = { options::standard+rev::cpp};
 	auto lang = params::getlanguage(cmdline);
 	REQUIRE(lang.id == bin2hpp::lang_id::cpp);
-	REQUIRE(lang._cpprev == bin2hpp::cpprev::cpp17);
+	REQUIRE(lang._cpprev == bin2hpp::cpp_rev::cpp17);
 }
 
 TEST_CASE("getlanguage3", "[language][parameters]"){
 	std::vector<std::string> cmdline = { options::standard+rev::cpp98};
 	auto lang = params::getlanguage(cmdline);
 	REQUIRE(lang.id == bin2hpp::lang_id::cpp);
-	REQUIRE(lang._cpprev == bin2hpp::cpprev::cpp98);
+	REQUIRE(lang._cpprev == bin2hpp::cpp_rev::cpp98);
 }
 
 TEST_CASE("getlanguage4", "[language][parameters]"){
 	std::vector<std::string> cmdline = { options::standard+rev::c};
 	auto lang = params::getlanguage(cmdline);
 	REQUIRE(lang.id == bin2hpp::lang_id::c);
-	REQUIRE(lang._crev == bin2hpp::crev::c11);
+	REQUIRE(lang._crev == bin2hpp::c_rev::c11);
 }
 
 TEST_CASE("getlanguage5", "[language][parameters]"){
 	std::vector<std::string> cmdline = { options::standard+rev::c89};
 	auto lang = params::getlanguage(cmdline);
 	REQUIRE(lang.id == bin2hpp::lang_id::c);
-	REQUIRE(lang._crev == bin2hpp::crev::c89);
+	REQUIRE(lang._crev == bin2hpp::c_rev::c89);
 }
 
 ////////////////////////////////////////////////////////////////////////
