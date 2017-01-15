@@ -168,7 +168,7 @@ namespace bin2hpp{
 	struct lang_options_java{
 		bin2hpp::java_rev rev;
 		bin2hpp::resource_type_java res = bin2hpp::resource_type_java::byte_arr;
-		std::string _namespace = defaultnamespace;
+		std::string class_name = defaultnamespace;
 		explicit lang_options_java(const bin2hpp::java_rev rev_ = bin2hpp::java_rev::j1_9) : rev(rev_){}
 	};
 
@@ -177,7 +177,7 @@ namespace bin2hpp{
 			case constid_size::_const: return constid::_const;
 			case constid_size::_constexpr: return constid::_constexpr;
 			case constid_size::_enum: return constid::_enum;
-			default: assert(false);
+			default: assert(false); return "";
 		}
 	}
 
@@ -373,7 +373,7 @@ namespace bin2hpp{
 			out << "package " << package << ";\n";
 		}
 		out << "// " << comment << "\n\n";
-		out << "class " << op._namespace << "{\n";
+		out << "class " << op.class_name << "{\n";
 		create_byte_array(in, variablename, out);
 		out << "}\n\n";
 

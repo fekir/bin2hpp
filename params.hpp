@@ -547,7 +547,7 @@ namespace params{
 		toreturn.langopt = defaultsettings;
 
 		// namespace
-		toreturn.langopt._namespace = getnamespace(params);
+		toreturn.langopt.class_name = getnamespace(params);
 
 		bin2hpp::language lang;
 		lang._javarev = toreturn.langopt.rev;
