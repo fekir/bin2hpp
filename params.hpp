@@ -343,7 +343,7 @@ namespace params{
 	}
 
 	inline void overwriteconstspec(std::vector<std::string>& params, const bin2hpp::language& constspec, bin2hpp::constid_array& c_arr, bin2hpp::constid_size& c_siz ){
-		const auto itinend       = std::find(params.begin(), params.end(), options::in);
+		auto itinend       = std::find(params.begin(), params.end(), options::in);
 
 		{
 			const auto itcons = std::find_if(params.begin(), itinend,
@@ -354,7 +354,8 @@ namespace params{
 					throw std::runtime_error("java does not accept a const id");
 				}
 				std::string o_c_size = itcons->substr(options::constspec.length());
-				params.erase(itcons);
+				const auto tmp = params.erase(itcons);
+				itinend = std::find(tmp, params.end(), options::in); // reload since we have invalidated the iterator
 				if (o_c_size == "const") {
 					c_siz = bin2hpp::constid_size::_const;
 					c_arr = bin2hpp::constid_array::_const;
@@ -381,7 +382,8 @@ namespace params{
 					throw std::runtime_error("java does not accept a const id");
 				}
 				std::string o_c_size = itconstsize->substr(options::constsize.length()); // fixme: validate namespace
-				params.erase(itconstsize);
+				const auto tmp = params.erase(itconstsize);
+				itinend = std::find(tmp, params.end(), options::in); // reload since we have invalidated the iterator
 				if (o_c_size == bin2hpp::constid::_const) {
 					c_siz = bin2hpp::constid_size::_const;
 				} else if (o_c_size == bin2hpp::constid::_enum) {
@@ -409,7 +411,8 @@ namespace params{
 					throw std::runtime_error("java does not accept a const id");
 				}
 				std::string o_c_arr = itconstarray->substr(options::constarray.length()); // fixme: validate namespace
-				params.erase(itconstarray);
+				const auto tmp = params.erase(itconstarray); // reload since we have invalidated the iterator
+				itinend = std::find(tmp, params.end(), options::in);
 				if (o_c_arr == bin2hpp::constid::_const) {
 					c_arr = bin2hpp::constid_array::_const;
 				} else if (o_c_arr == bin2hpp::constid::_constexpr) {
