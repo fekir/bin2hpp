@@ -8,8 +8,8 @@ include_directories(${OUT_DIR_C})
 add_executable(${PROJECT_NAME} main.c
 )
 
-##########################################################
-## Compile Test
+# using designated initializers
+set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 99)
 
 add_dependencies(${PROJECT_NAME} ${GENERATE_C_FILES})
 

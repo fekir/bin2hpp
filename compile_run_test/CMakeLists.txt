@@ -23,14 +23,15 @@ set(OUT_CPP_FILES
 )
 
 set(helloworldfile "${CMAKE_CURRENT_SOURCE_DIR}/../extern/data/helloworld")
+set(binaryblobfile "${CMAKE_CURRENT_SOURCE_DIR}/../extern/data/bin2hppbinarydata.dat")
 add_custom_command(
 	OUTPUT ${OUT_DIR_CPP}/res_stdarray.hpp
-	COMMAND bin2hpp -ns=res1                               -in ${helloworldfile} -out ${OUT_DIR_CPP}/res_stdarray.hpp
-	COMMAND bin2hpp -ns=res2 -pragma                       -in ${helloworldfile} -out ${OUT_DIR_CPP}/res_stdarray_pragma.hpp
-	COMMAND bin2hpp -ns=res3 -const=const                  -in ${helloworldfile} -out ${OUT_DIR_CPP}/res_stdarray_const.hpp
-	COMMAND bin2hpp -ns=res4 -vartype=c_arr                 -in ${helloworldfile} -out ${OUT_DIR_CPP}/res_carray.hpp
-	COMMAND bin2hpp -ns=res5 -vartype=c_arr -constsize=enum -in ${helloworldfile} -out ${OUT_DIR_CPP}/res_carray_enum.hpp
-	COMMAND bin2hpp -ns=res6 -vartype=c_arr -const=const    -in ${helloworldfile} -out ${OUT_DIR_CPP}/res_carray_const1.hpp
+	COMMAND bin2hpp -ns=res1                                -in ${binaryblobfile} -out ${OUT_DIR_CPP}/res_stdarray.hpp
+	COMMAND bin2hpp -ns=res2 -pragma                        -in ${binaryblobfile} -out ${OUT_DIR_CPP}/res_stdarray_pragma.hpp
+	COMMAND bin2hpp -ns=res3 -const=const                   -in ${binaryblobfile} -out ${OUT_DIR_CPP}/res_stdarray_const.hpp
+	COMMAND bin2hpp -ns=res4 -vartype=c_arr                 -in ${binaryblobfile} -out ${OUT_DIR_CPP}/res_carray.hpp
+	COMMAND bin2hpp -ns=res5 -vartype=c_arr -constsize=enum -in ${binaryblobfile} -out ${OUT_DIR_CPP}/res_carray_enum.hpp
+	COMMAND bin2hpp -ns=res6 -vartype=c_arr -const=const    -in ${binaryblobfile} -out ${OUT_DIR_CPP}/res_carray_const1.hpp
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -41,10 +42,10 @@ set(OUT_C_FILES
 )
 add_custom_command(
 	OUTPUT ${OUT_DIR_C}/res_carray.h
-	COMMAND bin2hpp -std=c -ns=res1                 -in ${helloworldfile} -out ${OUT_DIR_C}/res_carray.h
-	COMMAND bin2hpp -std=c -ns=res2 -constsize=enum -in ${helloworldfile} -out ${OUT_DIR_C}/res_carray_enum.h
-	COMMAND bin2hpp -std=c -ns=res3 -const=const    -in ${helloworldfile} -out ${OUT_DIR_C}/res_carray_const1.h
-	COMMAND bin2hpp -std=c -ns=res4 -pragma         -in ${helloworldfile} -out ${OUT_DIR_C}/res_carray_pragma.h
+	COMMAND bin2hpp -std=c -ns=res1                 -in ${binaryblobfile} -out ${OUT_DIR_C}/res_carray.h
+	COMMAND bin2hpp -std=c -ns=res2 -constsize=enum -in ${binaryblobfile} -out ${OUT_DIR_C}/res_carray_enum.h
+	COMMAND bin2hpp -std=c -ns=res3 -const=const    -in ${binaryblobfile} -out ${OUT_DIR_C}/res_carray_const1.h
+	COMMAND bin2hpp -std=c -ns=res4 -pragma         -in ${binaryblobfile} -out ${OUT_DIR_C}/res_carray_pragma.h
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
