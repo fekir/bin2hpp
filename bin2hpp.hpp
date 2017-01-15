@@ -13,6 +13,7 @@
 #include <sstream>      // std::stringstream
 
 #include <iostream>
+#include <cassert>
 
 namespace hexutils{
 
@@ -124,7 +125,7 @@ namespace bin2hpp{
 		switch(id){
 			case constid_array::_const: return constid::_const;
 			case constid_array::_constexpr: return constid::_constexpr;
-			default: assert(false);
+			default: assert(false); return "";
 		}
 	}
 
