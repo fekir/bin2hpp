@@ -1,43 +1,28 @@
-## Try to find Visual Leak Debugger library (VDL)
-## http://vld.codeplex.com
+## Try to find catch (C++ Automated Test Cases in Headers)
+## https://github.com/philsquared/Catch/
 ##
 ## Sets the following variables:
-## CATCH_FOUND
-## CATCH_INCLUDE_DIR
-## CATCH_LIBRARY //?
+## CATCH_FOUND - System has catch library
+## CATCH_INCLUDE_DIRS - catch include directory
 ##
 
-set(CATCH_FOUND FALSE)
 
-set(PROG_FILES_X86_ENV "PROGRAMFILES(X86)")
-set(PROG_FILES_ENV "PROGRAMFILES")
-
-#fixme: add paths for windows
-find_path(CATCH_INCLUDE_DIR catch.hpp
-	PATHS "/usr/include/"
-)
-#MESSAGE("(FindCatch) CATCH_INCLUDE_DIR=${CATCH_INCLUDE_DIR}")
-
-#FIND_LIBRARY(CATCH_LIBRARY NAMES catch
-#  HINTS
-#    ENV VLD_HOME
-#  PATH_SUFFIXES ${VLD_LIB_SUBDIRS}
-#  PATHS
-#  "$ENV{${PROG_FILES_X86_ENV}}/Visual Leak Detector"
-#  "$ENV{${PROG_FILES_ENV}}/Visual Leak Detector"
-#)
-#MESSAGE("(FindCATCH)CATCH_LIBRARY=${CATCH_LIBRARY}")
-
-#IF(CATCH_INCLUDE_DIR AND CATCH_LIBRARY)
-if(CATCH_INCLUDE_DIR AND CATCH_LIBRARY)
-  SET(CATCH_FOUND TRUE)
+if(WIN32)
+	set(PROG_FILES_X86_ENV "PROGRAMFILES(X86)")
+	set(PROG_FILES_ENV "ProgramW6432")
+	find_path(CATCH_INCLUDE_DIR catch.hpp
+		PATH "$ENV{${PROG_FILES_ENV}}/catch/"
+		PATH "$ENV{${PROG_FILES_X86_ENV}}/catch/"
+	)
+else()
+	find_path(CATCH_INCLUDE_DIR catch.hpp
+		PATHS "/usr/include/"
+	)
 endif()
 
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(VLD DEFAULT_MSG VLD_LIBRARY VLD_INCLUDE_DIR)
+find_package_handle_standard_args(CATCH DEFAULT_MSG CATCH_INCLUDE_DIR)
 
-MARK_AS_ADVANCED(
-  CATCH_INCLUDE_DIR
-#  CATCH_LIBRARY
-)
+mark_as_advanced( CATCH_INCLUDE_DIR )
+set(CATCH_INCLUDE_DIRS ${CATCH_INCLUDE_DIR})
 
