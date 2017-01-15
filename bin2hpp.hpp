@@ -207,12 +207,12 @@ namespace bin2hpp{
 			for(auto i = decltype(unsigned_readed){0} ; i != unsigned_readed; ++i){
 				auto c = hexutils::to_hex(buffer.at(i));
 				if(f == format::c){
-					out << "'\\x" << c[0] << c[1] << "',"; // fixme: format should be specified with out param...
+					// notation '\xaa' can lead to problems..
+					out << "0x" << c[0] << c[1] << ","; // fixme: format should be specified with out param...
 				} else if (f == format::java_byte){
 					out << "(byte)0x" << c[0] << c[1] << ","; // fixme: format should be specified with out param...
 				}
 			}
-			int a = 1;
 		}
 		return totalsize;
 
