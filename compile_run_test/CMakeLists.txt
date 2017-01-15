@@ -2,6 +2,7 @@
 # Settings for generating include files
 set(OUT_DIR_CPP "${CMAKE_CURRENT_BINARY_DIR}")
 set(OUT_DIR_C "${CMAKE_CURRENT_BINARY_DIR}")
+set(OUT_DIR_JAVA "${CMAKE_CURRENT_BINARY_DIR}")
 
 
 set(GENERATE_CPP_FILES generateCPPfiles)
@@ -11,6 +12,10 @@ add_custom_target(${GENERATE_CPP_FILES}
 set(GENERATE_C_FILES generateCfiles)
 add_custom_target(${GENERATE_C_FILES}
 	DEPENDS ${OUT_DIR_C}/res_carray.h
+)
+set(GENERATE_JAVA_FILES generate_java_files)
+add_custom_target(${GENERATE_JAVA_FILES}
+	DEPENDS ${OUT_DIR_JAVA}/res_array.java
 )
 
 set(OUT_CPP_FILES
@@ -22,7 +27,7 @@ set(OUT_CPP_FILES
 	${OUT_DIR_CPP}/res_carray_const1.hpp
 )
 
-set(helloworldfile "${CMAKE_CURRENT_SOURCE_DIR}/../extern/data/helloworld")
+set(helloworldfile "${CMAKE_CURRENT_SOURCE_DIR}/../extern/data/helloworld.txt")
 set(binaryblobfile "${CMAKE_CURRENT_SOURCE_DIR}/../extern/data/bin2hppbinarydata.dat")
 add_custom_command(
 	OUTPUT ${OUT_DIR_CPP}/res_stdarray.hpp
@@ -49,7 +54,16 @@ add_custom_command(
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+set(OUT_JAVA_FILES
+	${OUT_DIR_JAVA}/res_array.java
+)
+add_custom_command(
+	OUTPUT ${OUT_DIR_JAVA}/res_array.java
+	COMMAND bin2hpp -std=java -ns=res1                 -in ${helloworldfile} -out ${OUT_DIR_JAVA}/res_array.java
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+
 add_subdirectory(cpp)
 add_subdirectory(c)
-#add_subdirectory(java)
+add_subdirectory(java)
 
