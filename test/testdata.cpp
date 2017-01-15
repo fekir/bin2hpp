@@ -90,7 +90,7 @@ TEST_CASE("HelloWorldTostdarray", "[helloworldtostarray]"){
 TEST_CASE("file1","[]"){
 	std::stringstream in;
 	in << "Hello World!";
-	std::ofstream out("/tmp/data2.h");
+	std::ofstream out("/tmp/data2.h", std::ofstream::binary);
 
 	bin2hpp::lang_options_cpp langopt;
 	bin2hpp::create_file(in, langopt, "varname", out);

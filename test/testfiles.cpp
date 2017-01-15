@@ -21,3 +21,9 @@ TEST_CASE("testfiledoesnotexist", "[]"){
     REQUIRE_THROWS_AS(bin2hpp::create_file(input, langop, "", output), std::runtime_error);
 }
 
+TEST_CASE("testfilessize", "[]") {
+	std::ifstream input(TESTDATADIR"/bin2hppbinarydata.dat", std::ifstream::binary);
+	std::stringstream output;
+	bin2hpp::lang_options_c langop;
+	bin2hpp::create_file(input, langop, "", output);
+}

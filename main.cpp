@@ -22,8 +22,8 @@ int main(int argc, char *argv[]){
 		auto defaultsettings = bin2hpp::lang_options_cpp(lang._cpprev);
 		auto par = params::parsecmdlinecpp(cmdline, defaultsettings);
 		for (size_t i = 0; i != par.in.size(); i++) {
-			std::ifstream input(par.in.at(i));
-			std::ofstream output(par.out.at(i));
+			std::ifstream input(par.in.at(i), std::ifstream::binary);
+			std::ofstream output(par.out.at(i), std::ofstream::binary);
 
 			bin2hpp::create_file(input, par.langopt, par.names.at(i), output);
 		}
@@ -33,8 +33,8 @@ int main(int argc, char *argv[]){
 		auto defaultsettings = bin2hpp::lang_options_c(lang._crev);
 		auto par = params::parsecmdlinec(cmdline, defaultsettings);
 		for (size_t i = 0; i != par.in.size(); i++) {
-			std::ifstream input(par.in.at(i));
-			std::ofstream output(par.out.at(i));
+			std::ifstream input(par.in.at(i), std::ifstream::binary);
+			std::ofstream output(par.out.at(i), std::ofstream::binary);
 
 			bin2hpp::create_file(input, par.langopt, par.names.at(i), output);
 		}
@@ -43,8 +43,8 @@ int main(int argc, char *argv[]){
 		auto defaultsettings = bin2hpp::lang_options_java(lang._javarev);
 		auto par = params::parsecmdline_java(cmdline, defaultsettings);
 		for (size_t i = 0; i != par.in.size(); i++) {
-			std::ifstream input(par.in.at(i));
-			std::ofstream output(par.out.at(i));
+			std::ifstream input(par.in.at(i), std::ifstream::binary);
+			std::ofstream output(par.out.at(i), std::ofstream::binary);
 
 			bin2hpp::create_file(input, par.langopt, par.names.at(i), "", output);
 		}

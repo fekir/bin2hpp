@@ -17,6 +17,8 @@ set(SOURCE_FILES
 	params.hpp
 )
 
+add_definitions(-DTESTDATADIR="${CMAKE_CURRENT_SOURCE_DIR}/extern/data")
+
 add_executable(${PROJECT_NAME} main.cpp
 	${SOURCE_FILES}
 )
