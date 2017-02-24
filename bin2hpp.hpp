@@ -21,7 +21,7 @@ namespace hexutils{
 	inline constexpr std::array<char,2> to_hex(const unsigned char c) noexcept {
 		static_assert(((std::numeric_limits<unsigned char>::max() & 0xff) >> 4 )<16, "Impossible");
 		static_assert(((std::numeric_limits<unsigned char>::max() & 0x0f)      )<16, "Impossible");
-		return {elems[(c & '\xff') >> 4], elems[c & 0x0f]};
+		return {{elems[(c & '\xff') >> 4], elems[c & 0x0f]}};
 	}
 
 }
@@ -101,11 +101,6 @@ namespace bin2hpp{
 				return resource_type_java::list;
 			}
 			throw std::runtime_error("no valid java resource type");
-
-			const std::string _byte_arr    = "byte[]";
-			const std::string _Byte_arr    = "Byte[]";
-			const std::string _string      = "String";
-			const std::string _list        = "List";
 		}
 	}
 
