@@ -16,7 +16,7 @@
 #include <string.h>
 #include <limits.h>
 
-static const char helloworld[] = "Hello World!\n\n"; // 2nd ewline is EOF
+static const char helloworld[] = "Hello World!\n\nHello Again!\n";
 
 #define MYSIZE(x) sizeof(x)/sizeof(x[0])
 

@@ -235,10 +235,6 @@ namespace bin2hpp{
 		out << "\";";
 	}
 
-
-	// crea const_id size_t variablename_size = 42;
-	//      const_id unsigned char[42] = { "0xAB", "0xCD" };
-	// tutto tabbed di 1\t
 	inline void create_c_array(std::istream& in, const std::string& variablename, constid_array c_a, constid_size c_s, bool iscpp, std::ostream& out){
 
 		assert(iscpp || c_a != constid_array::_constexpr && "c does not support constexpr");
