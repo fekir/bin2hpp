@@ -23,6 +23,10 @@
 #include "res_carray_const1.hpp"
 #include "res_carray_const1.hpp"
 
+#include "res_stdstring.hpp"
+#include "res_stdstring.hpp"
+
+
 
 //bin2hpp -ns=res4 -stdarr=false                 -in helloworld -out ${OUT_DIR}/res_carray.hpp
 #include "res_carray.h"
@@ -39,8 +43,7 @@
 #include <type_traits>
 #include <numeric>
 
-const std::string helloworld = "Hello World!\n\n"; // 2nd ewline is EOF
-constexpr size_t helloworldlength = 14;
+const std::string helloworld = "Hello World!\n\nHello Again!\n";
 
 constexpr size_t binarybloblength = std::numeric_limits<unsigned char>::max()*2;
 
@@ -113,6 +116,11 @@ TEST_CASE("stdarray2", "[cpp]"){
 TEST_CASE("stdarray3", "[cpp]"){
 	static_assert(is_stdarray<binarybloblength>(res3::bin2hppbinarydata_dat), "retval must be std::array");
 	REQUIRE(res1::bin2hppbinarydata_dat == res3::bin2hppbinarydata_dat);
+}
+
+TEST_CASE("stdstring", "[cpp]"){
+	static_assert(is_stdstrin(res7::helloworld_txt), "retval must be std::string");
+	REQUIRE(res7::helloworld_txt.size() == helloworld.size());
 }
 
 TEST_CASE("carray1_cpp", "[cpp]"){

@@ -225,16 +225,14 @@ namespace bin2hpp{
 	}
 
 	inline void create_std_string(std::istream& in, const std::string& variablename, constid_array c_a, std::ostream& out){
-		out << "const std::string " << variablename << "\"";
-		size_t totalsize = {};
+		out << "const std::string " << variablename << " = \"";
 
 		std::string tmp;
 		while(std::getline (in,tmp)){
-			out << tmp << "\n";
-
+			out << tmp << "\\n\\\n";
 		}
 		// fixme: ad error checking!
-		out << "\"";
+		out << "\";";
 	}
 
 
