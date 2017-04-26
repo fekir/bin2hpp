@@ -4,10 +4,7 @@
 #include "../params.hpp"
 
 // std
-#include <iostream>
-#include <cassert>
 #include <sstream>      // std::stringstream
-#include <stdexcept>
 
 using namespace params;
 

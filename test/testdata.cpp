@@ -4,8 +4,6 @@
 #include "../bin2hpp.hpp"
 
 // std
-#include <iostream>
-#include <cassert>
 #include <sstream>      // std::stringstream
 
 using namespace bin2hpp;
@@ -16,7 +14,6 @@ TEST_CASE("HelloWorldToHex for C source", "[convertstreamtohexnotation][Hello Wo
 	in << "Hello World!";
 	std::stringstream out;
 	auto length = convertstreamtohexnotation(in, out);
-	//std::cout << "content:\n" << out.str() << "\n";
 	REQUIRE(in.str().size() == length);
 	std::string out2 = out.str();
 	int j = 0;
@@ -42,7 +39,6 @@ TEST_CASE("HelloWorldToHex for Java source", "[convertstreamtohexnotation][Hello
 	in << "Hello World!";
 	std::stringstream out;
 	auto length = convertstreamtohexnotation(in, out, format::java_byte);
-	//std::cout << "content:\n" << out.str() << "\n";
 	REQUIRE(in.str().size() == length);
 	std::string out2 = out.str();
 	int j = 0;
