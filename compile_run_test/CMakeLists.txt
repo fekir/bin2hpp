@@ -65,7 +65,7 @@ set(OUT_JAVA_FILES
 	${OUT_DIR_JAVA}/res_array.java
 )
 add_custom_command(
-	OUTPUT ${OUT_DIR_JAVA}
+	OUTPUT ${OUT_JAVA_FILES}
 	COMMAND bin2hpp -std=java -ns=res1                 -in ${helloworldfile} -out ${OUT_DIR_JAVA}/res_array.java
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	DEPENDS ${helloworldfile} ${binaryblobfile} bin2hpp
